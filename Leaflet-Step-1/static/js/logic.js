@@ -18,15 +18,15 @@ d3.json(queryUrl, function(data) {
   function mapColor(mag) {
     switch (true) {
       case mag > 5:
-        return "#ea2c2c";
+        return "#F57C00";
       case mag > 4:
-        return "#eaa92c";
+        return "#673AB7";
       case mag > 3:
-        return "#d5ea2c";
+        return "#7CB342";
       case mag > 2:
-        return "#92ea2c";
+        return "#C8E6C9";
       case mag > 1:
-        return "#2ceabf";
+        return "#BBDEFB";
       default:
         return "#2c99ea";
     }
@@ -63,6 +63,23 @@ d3.json(queryUrl, function(data) {
   
   }).addTo(myMap);
 
+  var legend = L.control({position: "bottomright"});
+  legend.onAdd = function(){
+    var div = L.DomUtil.create("div","info legend");
+    var grades = [0,1,2,3,4,5];
+    var colors = ["#2c99ea", "#BBDEFB", "#C8E6C9", "#7CB342","#673AB7", "#F57C00"];
+    //loop through the intervals to put in the colors and grades
+
+    for(var i=0; i<grades.length; i++) {
+      div.innerHTML += 
+      "<i style='background: "+ colors[i] +"'></i>" +
+      grades[i] + (grades[i + 1] ? "&ndash;" +grades[i + 1] + "<br>" : "+");
+    }
+    return div;
+  };
+
+  legend.addTo(myMap)
+
 });
 
 var streetmap = L.tileLayer(
@@ -76,6 +93,8 @@ var streetmap = L.tileLayer(
     id: "mapbox/light-v10",
     accessToken: API_KEY
   }
+
+
 );
 
 //   // Sending our earthquakes layer to the createMap function
